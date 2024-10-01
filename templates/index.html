@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real Estate Agent Chat</title>
+    <style>
+        /* Basic tab styling */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real Estate Agent Chat</h1>
+
+    {% if not property_data.monthly_rent %}
+        <form method="POST">
+            <h2>Enter Property Details:</h2>
+            {% for key, value in property_data.items() %}
+                <label for="{{ key.replace('_', ' ') }}">{{ key.replace('_', ' ') }}:</label><br>
+                <input type="text" id="{{ key.replace('_', ' ') }}" name="{{ key.replace('_', ' ') }}" value="{{ value }}"> <br><br>
+            {% endfor %}
+            <input type="submit" value="Calculate">
+            <input type="submit" name="reset_form" value="Reset Form">
+        </form>
+    {% endif %}
+
+    {% if show_results %}
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Agent')" id="defaultOpen">Agent</button>
+            <button class="tablinks" onclick="openTab(event, 'Results')">Results</button>
+        </div>
+
+        <div id="Agent" class="tabcontent">
+            <form method="POST">
+                <label for="user_query">Your Query:</label><br>
+                <input type="text" id="user_query" name="user_query"><br><br>
+                <input type="submit" value="Submit">
+                <input type="submit" name="reset_form" value="Reset Form"> </form> </form>
+            {% if user_query %}
+                <h2>Agent's Response:</h2>
+                <p>{{ agent_response }}</p>
+            {% endif %}
+        </div>
+
+        <div id="Results" class="tabcontent">
+            <h2>Calculated Results:</h2>
+            <p>{{ results }}</p>
+            <h2>Market Comparisons:</h2>
+            <p>{{ comparisons }}</p>
+            <form method="POST">
+                <input type="submit" name="reset_form" value="Reset Form">
+            </form>
+        </div>
+
+        <script>
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+        </script>
+    {% endif %}
+</body>
+</html>

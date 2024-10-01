@@ -1,0 +1,6 @@
+altair
+pandas
+requests
+python-dotenv
+google-generativeai
+flask
